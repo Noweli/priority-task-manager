@@ -2,7 +2,7 @@
 
 namespace PriorityTaskManager.TaskManager;
 
-public class PriorityPriorityTaskManager : IPriorityTaskManager
+public sealed class PriorityPriorityTaskManager : IPriorityTaskManager
 {
     private readonly SemaphoreSlim _semaphore;
     private readonly PriorityQueue<object, int> _taskQueue;
