@@ -4,6 +4,7 @@ namespace PriorityTaskManager.TaskManager;
 
 public sealed class PriorityPriorityTaskManager : IPriorityTaskManager
 {
+    private const int DefaultDelayMilliseconds = 500;
     private readonly SemaphoreSlim _semaphore;
     private readonly PriorityQueue<object, int> _taskQueue;
     private readonly CancellationTokenSource _cancellationTokenSource;
@@ -19,7 +20,7 @@ public sealed class PriorityPriorityTaskManager : IPriorityTaskManager
 
     public Task<T> ScheduleTask<T>(Func<Task<T>> taskFunc, int priority)
     {
-        var taskItem = new PriorityTask<T>(taskFunc, priority, new TaskCompletionSource<T>());
+        var taskItem = new PriorityTask<T>(taskFunc, new TaskCompletionSource<T>());
 
         _semaphore.Wait();
         _taskQueue.Enqueue(taskItem, priority);
@@ -54,7 +55,7 @@ public sealed class PriorityPriorityTaskManager : IPriorityTaskManager
             }
             else
             {
-                await Task.Delay(100, cancellationToken);
+                await Task.Delay(DefaultDelayMilliseconds, cancellationToken);
             }
         }
     }
